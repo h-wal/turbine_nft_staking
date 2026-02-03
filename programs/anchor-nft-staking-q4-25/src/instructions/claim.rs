@@ -52,10 +52,7 @@ impl<'info> Claim<'info> {
         let points = self.user_account.points as u64;
 
         // Signer seeds for minting
-        let signer_seeds: &[&[&[u8]]] = &[&[
-            b"config",
-            &[self.config.bump],
-        ]];
+        let signer_seeds: &[&[&[u8]]] = &[&[b"config", &[self.config.bump]]];
 
         // Mint reward tokens to user's rewards account
         mint_to(
@@ -70,7 +67,7 @@ impl<'info> Claim<'info> {
                 signer_seeds,
             ),
             // Points to mint
-            points,
+            (points as u64).saturating_mul(10u64.pow(self.reward_mint.decimals as u32)),
         )?;
 
         // Reset points to 0
